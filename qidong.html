@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <link href="css/css/mui.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="css/api.css"/>
+        <link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+        <link rel="stylesheet" type="text/css" href="css/aui.css" />
+        <link rel="stylesheet" type="text/css" href="css/auislide.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <link rel="stylesheet" href="../css/live.css">
+        <style type="text/css">
+            body {
+                background-color: black;
+            }
+
+            .guide-img {
+                width: 100%;
+                height: auto;
+            }
+
+            #start {
+                position: absolute;
+                bottom: 40px;
+                width: 60%;
+                left: 20%;
+            }
+        </style>
+    </head>
+
+    <body>
+
+</br></br></br>
+        <div id="livebt" class="live-bt">
+          <div id="livetop" class="live-top"  >
+
+
+      <!--主播图片、名字-->
+            <div class="live-top-box" >
+
+              <div id="title" class="live-top-box-name" style="color:#fffc00;overflow:hidden;" tapmode onclick="openWin() ">
+
+               </div>
+            </div>
+
+
+
+        <div class="mui-content">
+            <div class="mui-slider mui-fullscreen">
+                <div class="mui-slider-group">
+                    <div class="mui-slider-item">
+                        <a href="javascript:;">
+                            <div class="guide-img" id="lrbox">
+                            </div>
+                            <button class="mui-btn  mui-btn-outlined" type="button" id="start" style="color:#ffffff">
+                              <div id="errorfrm" style="color:#ffffff">
+
+                              <div id="error">
+                              <span  id="mes">10</span>s
+                              </div>
+
+                              </div>
+                            </button>
+                        </a>
+                    </div>
+                    <div class="mui-slider-item">
+                        <a href="index.html">
+                            <div class="guide-img" id="lrboxa" style="color:#ffffff"> </div>
+                            <button class="mui-btn  mui-btn-outlined" type="button" id="start"  style="color:#ffffff">开始体验</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </body>
+
+  <script src="script/js/mui.min.js"></script>
+
+
+  <!--引导图-->
+  <script type="text/x-dot-template" id="lrtpl">
+  <img id="bpic" src="http://maya670.top/{{=it.picurl}}" onclick="openurl('{{=it.linkurl}}')">
+  </script>
+
+  <script type="text/x-dot-template" id="lrtpla">
+  <img id="bpic" src="http://maya670.top/{{=it.picurl}}" onclick="openurl('{{=it.linkurl}}')">
+  </script>
+
+  <script type="text/javascript" src="script/api.js"></script>
+  <script type="text/javascript" src="script/doT.js"></script>
+  <script type="text/javascript" src="script/auipullrefresh.js"></script>
+  <script type="text/javascript" src="script/auislide.js"></script>
+  <script type="text/javascript" src="script/auilazyload.js" ></script>
+  <script type="text/javascript">
+  var i = 10;
+  var intervalid;
+  intervalid = setInterval("fun()", 1000);
+  function fun() {
+  if (i == 0) {
+  window.location.href = "index.html";
+  clearInterval(intervalid);
+  }
+  document.getElementById("mes").innerHTML = i;
+  i--;
+  }
+
+    var api_url = localStorage.getItem('api_url');
+    apiready = function(){
+
+      getNav();
+      api.parseTapmode();
+
+    }
+
+
+
+
+    //轮播图获取
+    function getNav(){
+
+  	  var lrid = $api.byId('lrbox');
+      var lrtpl = $api.byId('lrtpl');
+      var lrbid = $api.byId('lrbbox');
+      var lrbtpl = $api.byId('lrbtpl');
+
+      var lrida = $api.byId('lrboxa');
+      var lrtpla = $api.byId('lrtpla');
+      var lrbida = $api.byId('lrbboxa');
+      var lrbtpa = $api.byId('lrbtpla');
+      api.ajax({
+          url: api_url+'/app/nav',
+          method: 'get',
+      },function(ret, err){
+          if (ret) {
+            //渲染模板
+            var fn = doT.template(lrtpl.text);
+            lrid.innerHTML = fn(ret.qidong1);
+
+            var fn = doT.template(lrtpla.text);
+            lrida.innerHTML = fn(ret.qidong2);
+
+  //        alert( JSON.stringify( ret ) );
+
+
+          } else {
+              alert( '连接到服务器失败' );
+              api.hideProgress();
+          }
+      });
+    }
+
+
+
+    function openurl(url) {
+       api.openApp({
+       androidPkg : 'android.intent.action.VIEW',
+       mimeType : 'text/html',
+       uri : url,
+       }, function(ret, err) {
+        var msg = JSON.stringify(ret);
+        api.openApp({
+        iosUrl: url
+      });
+      });
+   }
+
+  </script>
+
+</html>
