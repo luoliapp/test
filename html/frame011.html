@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/auislide.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+
+    <style>
+     html,body{background:#4eae9f}
+        .empty{ text-align: center; padding: 120px 0; }
+        .bd-t{
+  position:relative;
+}
+
+.bd-t::after {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(0deg, transparent 50%, #d1d1d1 50%);
+}
+
+.bar5 {background: rgba(255,255,255 0);}
+.bar5 input, .bar5 button {
+    background: transparent;
+}
+
+  /*搜索框样式*/
+.bar5 input {
+    border: 1px solid #d9d9d9;
+}
+.bar5 button {
+    top: 0;
+    right: 0;
+}
+
+/*搜索图标样式*/
+.bar5 button:before {
+    background-image:url(../image/app/sousuo.png)
+    font-family: FontAwesome;
+    font-size: 20px;
+    color: #000000;
+}
+.bar5 input:focus {
+    border-color: #000
+}
+
+/*边框高度*/
+div.search {padding: 0px 0;}
+
+/*搜索框尺寸*/
+form {
+    position: relative;
+    width: 95%;
+    margin: 0 auto;
+}
+
+input, button {
+    border: none;
+    outline: none;
+}
+
+
+input {
+    width: 95%;
+    height: 20px;
+    padding-left: 13px;
+}
+
+button {
+    height: 42px;
+    width: 42px;
+    cursor: pointer;
+    position: absolute;
+}
+    </style>
+</head>
+<body >
+  <table width="100%" height="250px" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td bgcolor="#02a28a">
+        <p>
+          <div class="br"> </div>
+          <center>
+</center>
+
+<div class="search bar5">
+<form>
+    <input type="text" style="color:#000;padding:10px" placeholder="输入您要观看的影片名称..." id="ff-wd">
+    <button type="submit" tapmode onclick="so()"><img src="../image/app/sousuo.png" /></button>
+</form>
+</div>
+
+
+    <section id="aui-slide"  style="background-image:(../image/lb-bg.jpg)">
+
+      <div id="slidebox" class="aui-slide-lb" >
+      </div>
+    <div class="aui-slide-page-wrap"><!--分页容器--></div>
+
+
+      <div class="gonggaoa" style="background:rgba(0,0,0, 0.5);height:30px;width:95%;margin-top:-5px">
+        <div class="list-title-l" >
+          <i class="iconfont icon-xitonggonggao" style="color:#f9fc03;font-size: 1rem"></i>
+        </div>
+
+        <div class="gonggao-r">
+
+          <span id="gonggao" style="color:#f9fc03;font-size: 0.65rem;padding-top:0.3rem;">会员任性看</span>
+
+        </div>
+
+      </div>
+
+    </section>
+      </p>
+    </td>
+    </tr>
+
+  </table>
+
+
+  <div class="aui-gridab aui-margin-b-15" style="width:95%">
+      <div class="aui-row" id="div_list_f">
+      </div>
+  </div>
+
+
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td bgcolor="#4eae9f">
+        <p>
+          <div class="index-ba" id="lrbox"></div>
+          <div class="aui-gridab aui-margin-b-15">
+              <div class="aui-row" id="div_list">
+              </div>
+          </div>
+    </section>
+      </p>
+    </td>
+    </tr>
+
+  </table>
+
+
+
+
+
+</body>
+<!--底部图片广告-->
+<script type="text/x-dot-template" id="bannertpl">
+  {{~ it.data : value : index }}
+    <div class="aui-slide-node bg-dark" tapmode onclick="toBanner('{{= value. linkurl }}')">
+        <img src="http://maya670.top/{{= value. picurl }}" />
+    </div>
+  {{~}}
+</script>
+
+
+<script type="text/x-dot-template" id="navcattpl">
+  {{~ it.data : value : index }}
+  		<div class="aui-col-xs-3 " tapmode onclick="openLive('{{= value. linkurl }}')">
+          <i class="aui-iconfont"><img src="http://maya670.top/{{= value. picurl }}"/></i>
+          <div class="aui-grid-label" style="color:#626262">{{= value. name }}</div>
+        </div>
+
+  {{~}}
+</script>
+
+<!--底部图片广告-->
+<script type="text/x-dot-template" id="lrtpl">
+<img id="bpic" src="http://maya670.top/{{=it.picurl}}" onclick="imgUrl('{{=it.linkurl}}')">
+</script>
+
+
+
+<!--文字广告-->
+<script type="text/x-dot-template" id="wzttpl">
+ <span style="color:red;font-size: 0.65rem" onclick="toBanner('{{=it.linkurl}}')">{{=it.name}}</span>
+</script>
+
+<!--文字广告-->
+<script type="text/x-dot-template" id="wzbtpl">
+ <span style="color:red;font-size: 0.65rem" onclick="toBanner('{{=it.linkurl}}')">{{=it.name}}</span>
+</script>
+
+<!--底部广告区域-->
+<script type="text/x-dot-template" id="navtjtpl">
+  {{~ it.data : value : index }}
+  		<div class="aui-col-xs-3 " tapmode onclick="imgUrl('{{= value. linkurl }}')">
+          <div class="myui-label" style="color:#626262">{{= value. name }}</div>
+          <div class="myui-label-b">{{= value. content }}</div>
+          <i class="aui-iconfont" ><img src="http://maya670.top/{{= value. picurl }}"/></i>
+        </div>
+  {{~}}
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/doT.js"></script>
+<script type="text/javascript" src="../script/auipullrefresh.js"></script>
+<script type="text/javascript" src="../script/auislide.js"></script>
+<script type="text/javascript" src="../script/auilazyload.js" ></script>
+<script type="text/javascript">
+  var imgdz = '';
+
+  var api_url = localStorage.getItem('api_url');
+  apiready = function(){
+    getBanner();
+    getNav();
+    api.parseTapmode();
+    api.ajax({
+        url: api_url+'/login/login/imgad.html',
+        method: 'get'
+    },function(ret, err){
+        if (ret) {
+          //alert( JSON.stringify( ret ) );
+          localStorage.setItem('fxpic1',ret.msg.fxpic1);
+          localStorage.setItem('fxurl1',ret.msg.fxurl1);
+          localStorage.setItem('fxpic2',ret.msg.fxpic2);
+          localStorage.setItem('fxurl2',ret.msg.fxurl2);
+          var bpic = $api.byId('bpic');
+
+        } else {
+
+        }
+    });
+
+    api.setRefreshHeaderInfo({
+        visible: true,
+        loadingImg: 'widget://image/refresh.png',
+        bgColor: '#fff',
+        textColor: '#333',
+        textDown: '下拉刷新...',
+        textUp: '松开刷新...',
+        showTime: true
+    }, function(ret, err){
+      if (err) {
+        api.toast({
+            msg: '加载数据失败',
+            duration: 2000,
+            location: 'middle'
+        });
+        api.refreshHeaderLoadDone();
+      }else {
+        getNav();
+        getBanner();
+        banNer();
+        api.toast({
+            msg: '刷新成功',
+            duration: 1000,
+            location: 'middle'
+        });
+        api.refreshHeaderLoadDone();
+
+      }
+
+    });
+  }
+
+
+
+  function imgUrl(url){
+    api.openWin({
+        name: 'h5',
+        url: './h5.html',
+        pageParam: {
+            url: url
+        }
+    });
+  }
+
+  //打开播放页
+  function openLive(url){
+    var time = localStorage.getItem('user_time');
+    var user_id = localStorage.getItem('user_id');
+    var username = localStorage.getItem('user_name');
+    var timestamp = Date.parse(new Date())/1000;
+    if(user_id==0){
+      api.alert({
+          title: '温馨提示',
+          msg: '请先登陆后使用',
+      });
+      api.openWin({
+          name: 'login',
+          url: './login.html',
+          delay: 300
+      });
+      return;
+
+    }
+
+    if (time>timestamp) {
+      api.showProgress({
+          title: 'VIP登录中...',
+          modal: false
+      });
+      setTimeout("playRadio();",1000);
+      var delay = 0;
+      if(api.systemType != 'ios'){
+          delay = 300;
+      }
+      api.openWin({
+          name: 'video_win',
+          url: './video_win.html',
+          delay: 800,
+          pageParam:{url:url},
+          bgColor: 'rgba(0,0,0,0)'
+      });
+
+    }else if (time == -1) {
+      api.showProgress({
+          title: 'VIP登录中...',
+          modal: false
+      });
+      setTimeout("playRadio();",2000);
+      var delay = 0;
+      if(api.systemType != 'ios'){
+          delay = 300;
+      }
+      api.openWin({
+          name: 'video_win',
+          url: './video_win.html',
+          delay: 800,
+          pageParam:{url:url},
+          bgColor: '#000000'
+      });
+
+
+    }else if (time<timestamp){
+      var dialogBox = api.require('dialogBox');
+      dialogBox.alert({
+          texts: {
+              content: '您的VIP会员已过期，或者未登录！',
+              leftBtnTitle: '去登录',
+              rightBtnTitle: '去续费'
+          },
+          styles: {
+              bg: '#fff',
+              w: 300,
+              content: {
+                  color: '#000',
+                  size: 14
+              },
+              left: {
+                  marginB: 7,
+                  marginL: 20,
+                  w: 130,
+                  h: 35,
+                  corner: 2,
+                  bg: '#ff7600',
+                  color: '#fff',
+                  size: 14
+              },
+              right: {
+                  marginB: 7,
+                  marginL: 10,
+                  w: 130,
+                  h: 35,
+                  corner: 2,
+                  bg: '#ff7600',
+                  color: '#fff',
+                  size: 14
+              }
+          }
+      }, function(ret) {
+          if (ret.eventType == 'left') {
+            api.openWin({
+                name: 'login',
+                url: './login.html',
+                delay: 300
+            });
+              var dialogBox = api.require('dialogBox');
+              dialogBox.close({
+                  dialogName: 'alert'
+              });
+          }else if (ret.eventType == 'right') {
+            api.openWin({
+                name: 'open_vip_win',
+                url: './open_vip_win.html',
+                delay: 300
+            });
+            var dialogBox = api.require('dialogBox');
+            dialogBox.close({
+                dialogName: 'alert'
+            });
+          }
+      });
+    }
+
+  }
+
+  function openVipurl(url){
+    var time = localStorage.getItem('user_time');
+    var user_id = localStorage.getItem('user_id');
+    var username = localStorage.getItem('user_name');
+    var timestamp = Date.parse(new Date())/1000;
+    if(user_id!=0){
+      api.alert({
+          title: '温馨提示',
+          msg: '请先登陆后使用',
+      });
+      api.openWin({
+          name: 'login',
+          url: './login.html',
+          delay: 300
+      });
+      return;
+
+    }
+
+    if (time>timestamp) {
+      api.showProgress({
+          title: 'VIP登录中...',
+          modal: false
+      });
+      setTimeout("playRadio();",1000);
+      var delay = 0;
+      if(api.systemType != 'ios'){
+          delay = 300;
+      }
+      api.openWin({
+          name: 'h5',
+          url: './h5.html',
+          delay: 800,
+          pageParam:{url:url},
+          bgColor: 'rgba(0,0,0,0)'
+      });
+
+    }else if (time == -1) {
+      api.showProgress({
+          title: 'VIP登录中...',
+          modal: false
+      });
+      setTimeout("playRadio();",2000);
+      var delay = 0;
+      if(api.systemType != 'ios'){
+          delay = 300;
+      }
+      api.openWin({
+          name: 'h5',
+          url: './h5.html',
+          delay: 800,
+          pageParam:{url:url},
+          bgColor: '#000000'
+      });
+
+
+    }else if (time<timestamp){
+      var dialogBox = api.require('dialogBox');
+      dialogBox.alert({
+          texts: {
+              content: '您的VIP会员已过期，或者未登录！',
+              leftBtnTitle: '去登录',
+              rightBtnTitle: '去续费'
+          },
+          styles: {
+              bg: '#fff',
+              w: 300,
+              content: {
+                  color: '#000',
+                  size: 14
+              },
+              left: {
+                  marginB: 7,
+                  marginL: 20,
+                  w: 130,
+                  h: 35,
+                  corner: 2,
+                  bg: '#ff7600',
+                  color: '#fff',
+                  size: 14
+              },
+              right: {
+                  marginB: 7,
+                  marginL: 10,
+                  w: 130,
+                  h: 35,
+                  corner: 2,
+                  bg: '#ff7600',
+                  color: '#fff',
+                  size: 14
+              }
+          }
+      }, function(ret) {
+          if (ret.eventType == 'left') {
+              var dialogBox = api.require('dialogBox');
+              dialogBox.close({
+                  dialogName: 'alert'
+              });
+          }else if (ret.eventType == 'right') {
+            api.openWin({
+                name: 'open_vip_win',
+                url: './open_vip_win.html',
+                delay: 300
+            });
+            var dialogBox = api.require('dialogBox');
+            dialogBox.close({
+                dialogName: 'alert'
+            });
+          }
+      });
+    }
+
+  }
+
+  function playRadio(){
+    api.hideProgress();
+  }
+
+
+
+  //访问轮播地址
+  function toBanner(url){
+
+    if (url == '') {
+
+    }else {
+      api.openWin({
+          name: 'h5',
+          url: './h5.html',
+          pageParam: {
+              url: url
+          }
+      });
+    }
+  }
+
+  //菜单导航获取
+  function getBanner(){
+    var bannerid = $api.byId('slidebox');
+    var bannertpl = $api.byId('bannertpl');
+
+    api.ajax({
+        url: api_url+'/login/login/banben.html',
+        method: 'get'
+    },function(ret, err){
+        if (ret) {
+          localStorage.setItem('user_advert',ret.advert);
+          var advert = $api.byId('gonggao');
+          advert.innerHTML = localStorage.getItem('user_advert');
+            localStorage.setItem('jx_url1',ret.banben);
+            localStorage.setItem('jx_url2',ret.url);
+            localStorage.setItem('jx_url3',ret.url2);
+            localStorage.setItem('jx_url4',ret.url3);
+            localStorage.setItem('jx_url5',ret.url4);
+            localStorage.setItem('jx_url6',ret.url5);
+            localStorage.setItem('hburl',ret.hburl);
+        } else {
+            //alert( JSON.stringify( err ) );
+        }
+    });
+
+    api.ajax({
+        url: api_url+'/app/nav',
+        method: 'get',
+    },function(ret, err){
+        if (ret) {
+          //渲染模板
+          var pagefn = doT.template(bannertpl.text);
+          bannerid.innerHTML = pagefn(ret.banner);
+//      alert( JSON.stringify( ret.banner ) );
+          banNer();
+
+        } else {
+            alert( '网络错误' );
+            api.hideProgress();
+        }
+    });
+  }
+
+
+  //轮播图获取
+  function getNav(){
+    var navid = $api.byId('div_list_f');
+    var navtpl = $api.byId('navcattpl');
+	  var navtjid = $api.byId('div_list');
+    var navtjtpl = $api.byId('navtjtpl');
+	  var lrid = $api.byId('lrbox');
+    var lrtpl = $api.byId('lrtpl');
+
+
+
+    var wztid = $api.byId('wzbox_top');
+    var wzttpl = $api.byId('wzttpl');
+    var wzbid = $api.byId('wzbox_bottom');
+    var wzbtpl = $api.byId('wzbtpl');
+    var lrbid = $api.byId('lrbbox');
+    var lrbtpl = $api.byId('lrbtpl');
+    api.ajax({
+        url: api_url+'/app/nav',
+        method: 'get',
+    },function(ret, err){
+        if (ret) {
+          //渲染模板
+          var pagefn = doT.template(navtpl.text);
+          navid.innerHTML = pagefn(ret.vip);
+          var pagefn = doT.template(navtjtpl.text);
+          navtjid.innerHTML = pagefn(ret.tj);
+          var fn = doT.template(lrtpl.text);
+          lrid.innerHTML = fn(ret.lr);
+
+          var fns = doT.template(wzttpl.text);
+          var wzd=ret.wz;
+          wztid.innerHTML = fns(wzd.data[0]);
+          var fn = doT.template(wzbtpl.text);
+          wzbid.innerHTML = fn(wzd.data[1]);
+//        alert( JSON.stringify( ret ) );
+
+
+        } else {
+            alert( '网络错误' );
+            api.hideProgress();
+        }
+    });
+  }
+
+
+  //幻灯轮播图
+  function banNer(){
+    var slide = new auiSlide({
+        container:document.getElementById("aui-slide"),
+        // "width":300,
+        "height":150,
+        "speed":300,
+        "pageShow":true,
+        "autoPlay": 5000,
+        "pageStyle":'dot',
+        "loop":true,
+        'dotPosition':'center',
+    });
+  }
+
+  new auiLazyload({
+      errorImage:'../image/error-img.jpg'
+  });
+
+
+
+  function openurl(url) {
+     api.openApp({
+     androidPkg : 'android.intent.action.VIEW',
+     mimeType : 'text/html',
+     uri : url,
+     }, function(ret, err) {
+      var msg = JSON.stringify(ret);
+      api.openApp({
+      iosUrl: url
+    });
+    });
+ }
+
+
+
+ function so(){
+    var wd = $api.val($api.byId('ff-wd'));
+  	api.openWin({
+    name: 'video_soplay',
+    url: './video_soplay.html',
+    pageParam: {
+    url: 'http://m.360kan.com/search/index?kw=' + wd
+        }
+    });
+
+}
+
+
+</script>
+</html>

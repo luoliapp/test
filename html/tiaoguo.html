@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/live.css">
+
+
+    <title>title</title>
+
+
+</head>
+<body>
+
+
+  <div id="livebt" class="live-bt">
+    <div id="livetop" class="live-top"  >
+
+
+<!--主播图片、名字-->
+      <div class="live-top-box" >
+
+        <div id="title" class="live-top-box-name" style="color:#fffc00;overflow:hidden;" tapmode onclick="openWin() ">
+          <div id="errorfrm">
+
+          <div id="error">
+          <span id="mes">7</span>s
+          </div>
+
+          </div>
+         </div>
+      </div>
+
+
+
+</body>
+<script language="javascript" type="text/javascript">
+var i = 7;
+var intervalid;
+intervalid = setInterval("fun()", 1000);
+function fun() {
+if (i == 0) {
+window.location.href = "../index.html";
+clearInterval(intervalid);
+}
+document.getElementById("mes").innerHTML = i;
+i--;
+}
+</script>
+</html>

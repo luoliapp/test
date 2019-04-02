@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/qidong.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" href="../css/base.css">
+
+    <style>
+           html,body{background-color: #f3f3f3}
+        .empty{ text-align: center; padding: 120px 0; }
+    </style>
+</head>
+<body >
+  <div id="aui-slide">
+    <div id="slidebox" class="aui-slide-wrap" >
+
+
+    </div>
+    <div class="aui-slide-page-wrap"><!--分页容器--></div>
+  </div>
+
+
+
+</body>
+
+<script type="text/x-dot-template" id="bannertpl">
+  {{~ it.data : value : index }}
+    <div class="aui-slide-node bg-dark"  tapmode onclick="toBanner('{{= value. linkurl }}')">
+        <img src="http://maya670.top/{{= value. picurl }}" />
+    </div>
+  {{~}}
+</script>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/doT.js"></script>
+<script type="text/javascript" src="../script/auipullrefresh.js"></script>
+<script type="text/javascript" src="../script/qidong.js"></script>
+<script type="text/javascript" src="../script/auilazyload.js" ></script>
+<script type="text/javascript">
+  var imgdz = '';
+
+  var api_url = localStorage.getItem('api_url');
+  apiready = function(){
+    getBanner();
+    getNav();
+
+
+    api.parseTapmode();
+    api.ajax({
+        url: api_url+'/login/login/imgad.html',
+        method: 'get'
+    },function(ret, err){
+        if (ret) {
+          //alert( JSON.stringify( ret ) );
+          localStorage.setItem('fxpic1',ret.msg.fxpic1);
+          localStorage.setItem('fxurl1',ret.msg.fxurl1);
+          localStorage.setItem('fxpic2',ret.msg.fxpic2);
+          localStorage.setItem('fxurl2',ret.msg.fxurl2);
+          var bpic = $api.byId('bpic');
+
+        } else {
+
+        }
+    });
+
+  }
+
+
+  function imgUrl(url){
+    api.openWin({
+        name: 'h5',
+        url: './h5.html',
+        pageParam: {
+            url: url
+        }
+    });
+  }
+
+
+
+  function playRadio(){
+    api.hideProgress();
+  }
+
+
+
+  //访问轮播地址
+  function toBanner(url){
+
+    if (url == '') {
+
+    }else {
+      api.openWin({
+          name: 'h5',
+          url: './h5.html',
+          pageParam: {
+              url: url
+          }
+      });
+    }
+  }
+
+  //菜单导航获取
+  function getBanner(){
+    var bannerid = $api.byId('slidebox');
+    var bannertpl = $api.byId('bannertpl');
+
+    api.ajax({
+        url: api_url+'/login/login/banben.html',
+        method: 'get'
+    },function(ret, err){
+        if (ret) {
+          localStorage.setItem('user_advert',ret.advert2);
+          var advert = $api.byId('gonggao');
+          advert.innerHTML = localStorage.getItem('user_advert');
+            localStorage.setItem('jx_url1',ret.banben);
+            localStorage.setItem('jx_url2',ret.url);
+            localStorage.setItem('jx_url3',ret.url2);
+            localStorage.setItem('jx_url4',ret.url3);
+            localStorage.setItem('jx_url5',ret.url4);
+            localStorage.setItem('jx_url6',ret.url5);
+            localStorage.setItem('hburl',ret.hburl);
+        } else {
+            //alert( JSON.stringify( err ) );
+        }
+    });
+
+    api.ajax({
+        url: api_url+'/app/nav',
+        method: 'get',
+    },function(ret, err){
+        if (ret) {
+          //渲染模板
+          var pagefn = doT.template(bannertpl.text);
+          bannerid.innerHTML = pagefn(ret.qidongbanner);
+//      alert( JSON.stringify( ret.banner ) );
+          banNer();
+
+        } else {
+            alert( '连接到服务器失败' );
+            api.hideProgress();
+        }
+    });
+  }
+
+
+  //轮播图获取
+  function getNav(){
+    var navid = $api.byId('div_list_f');
+    var navtpl = $api.byId('navcattpl');
+	  var navtjid = $api.byId('div_list');
+    var navtjtpl = $api.byId('navtjtpl');
+	  var lrid = $api.byId('lrbox');
+    var lrtpl = $api.byId('lrtpl');
+
+
+
+    var wztid = $api.byId('wzbox_top');
+    var wzttpl = $api.byId('wzttpl');
+    var wzbid = $api.byId('wzbox_bottom');
+    var wzbtpl = $api.byId('wzbtpl');
+    var lrbid = $api.byId('lrbbox');
+    var lrbtpl = $api.byId('lrbtpl');
+    api.ajax({
+        url: api_url+'/app/nav',
+        method: 'get',
+    },function(ret, err){
+        if (ret) {
+          //渲染模板
+
+
+
+        } else {
+            alert( '连接到服务器失败' );
+            api.hideProgress();
+        }
+    });
+  }
+
+
+  //幻灯轮播图
+  function banNer(){
+    var slide = new auiSlide({
+        container:document.getElementById("aui-slide"),
+
+    		"height":720,
+        "speed":1000,
+        "pageShow":true,
+        "autoPlay": 5000,
+        "pageStyle":'dot',
+        "loop":false,
+        'dotPosition':'center',
+    });
+  }
+
+  new auiLazyload({
+      errorImage:'../image/error-img.jpg'
+  });
+
+
+
+  function openurl(url) {
+     api.openApp({
+     androidPkg : 'android.intent.action.VIEW',
+     mimeType : 'text/html',
+     uri : url,
+     }, function(ret, err) {
+      var msg = JSON.stringify(ret);
+      api.openApp({
+      iosUrl: url
+    });
+    });
+ }
+
+
+</script>
+</html>
